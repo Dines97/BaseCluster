@@ -1,0 +1,113 @@
+server:
+  extraArgs: 
+    - --insecure
+
+cr:
+  create: true
+  namespace: istio-system
+  spec:  
+    external_services:
+      prometheus:
+        # Prometheus service name is "metrics" and is in the "telemetry" namespace
+        url: "http://kube-prometheus-prometheus.prometheus:9090/"
+      tracing:
+        enabled: true
+        in_cluster_url: 'http://jaeger-operator-jaeger-query.jaeger-operator:16685/jaeger'
+        use_grpc: true
+        url: 'http://my-jaeger-host/jaeger' 
+      grafana:
+        enabled: true
+        # Grafana service name is "grafana" and is in the "telemetry" namespace.
+        in_cluster_url: 'http://grafana.grafana:3000/'
+        # Public facing URL of Grafana
+        url: 'http://my-ingress-host/grafana'
+    auth:
+      strategy: "anonymous"
+  
+jaeger:
+  create: true
+
+dashboardProviders:
+  dashboardproviders.yaml:
+    apiVersion: 1
+    providers:
+      - name: default
+        orgId: 1
+        folder:
+        type: file
+        disableDeletion: true
+        editable: false
+        options:
+          path: /var/lib/grafana/dashboards/default
+grafana:
+  dashboards:
+    default:
+      # Ref: https://istio.io/latest/docs/ops/integrations/grafana/ 
+      istio-mesh:
+        gnetId: 7639
+        revision: 108
+        datasource: Prometheus
+
+      istio-service:
+        gnetId: 7636
+        revision: 108
+        datasource: Prometheus
+
+      istio-workload:
+        gnetId: 7630
+        revision: 108
+        datasource: Prometheus
+
+      istio-perfomance:
+        gnetId: 11829
+        revision: 108
+        datasource: Prometheus
+
+      istio-control-plane:
+        gnetId: 7645
+        revision: 108
+        datasource: Prometheus
+
+      kubernetes-cluster:
+        # Ref: https://grafana.com/grafana/dashboards/315
+        gnetId: 315
+        revision: 3
+        datasource: Prometheus
+
+prometheus:
+  prometheusSpec:
+    additionalScrapeConfigs: 
+            - job_name: kubernetes-nodes-cadvisor
+              scrape_interval: 10s
+              scrape_timeout: 10s
+              scheme: https  # remove if you want to scrape metrics on insecure port
+              tls_config:
+                ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+              bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+              kubernetes_sd_configs:
+                - role: node
+              relabel_configs:
+                - action: labelmap
+                  regex: __meta_kubernetes_node_label_(.+)
+                # Only for Kubernetes ^1.7.3.
+                # See: https://github.com/prometheus/prometheus/issues/2916
+                - target_label: __address__
+                  replacement: kubernetes.default.svc:443
+                - source_labels: [__meta_kubernetes_node_name]
+                  regex: (.+)
+                  target_label: __metrics_path__
+                  replacement: /api/v1/nodes/${1}/proxy/metrics/cadvisor
+              metric_relabel_configs:
+                - action: replace
+                  source_labels: [id]
+                  regex: '^/machine\.slice/machine-rkt\\x2d([^\\]+)\\.+/([^/]+)\.service$'
+                  target_label: rkt_container_name
+                  replacement: '${2}-${1}'
+                - action: replace
+                  source_labels: [id]
+                  regex: '^/system\.slice/(.+)\.service$'
+                  target_label: systemd_service_name
+                  replacement: '${1}'
+
+metrics:
+  enabled: true

@@ -1,0 +1,22 @@
+context: default
+
+settings:
+  kubeContext: "minikube"
+
+namespaces:
+  argocd: 
+
+helmRepos:
+  argo: https://argoproj.github.io/argo-helm
+
+apps:
+  argo-cd-app:
+    namespace: argocd
+    enabled: true
+    chart: argo/argo-cd
+    version: 3.35.1
+    valuesFiles: 
+      - "./minvalues.yaml"
+
+
+    

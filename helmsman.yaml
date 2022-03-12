@@ -1,0 +1,104 @@
+context: default
+
+settings:
+  kubeContext: "minikube"
+
+namespaces:
+  istio-system: 
+  argocd: 
+    labels:
+      istio-injection: enabled
+  prometheus:
+    labels:
+      istio-injection: enabled
+  kiali-operator:
+    labels:
+      istio-injection: enabled
+  jaeger-operator:
+    labels:
+      istio-injection: enabled
+  grafana:
+    labels:
+      istio-injection: enabled
+  cadvisor:
+    labels:
+      istio-injection: enabled
+
+helmRepos:
+  istio: https://istio-release.storage.googleapis.com/charts
+  argo: https://argoproj.github.io/argo-helm
+  kiali: https://kiali.org/helm-charts
+  prometheus-community: https://prometheus-community.github.io/helm-charts
+  # bitnami: https://charts.bitnami.com/bitnami
+  jaegertracing: https://jaegertracing.github.io/helm-charts
+  grafana: https://grafana.github.io/helm-charts
+  ckotzbauer: https://ckotzbauer.github.io/helm-charts
+
+apps:
+  istio-base:
+    namespace: istio-system
+    enabled: true
+    chart: istio/base
+    version: 1.13.0
+    priority: -101
+    wait: true
+
+  istiod:
+    namespace: istio-system
+    enabled: true
+    chart: istio/istiod
+    version: 1.13.0
+    priority: -100
+    wait: true
+
+  argo-cd:
+    namespace: argocd
+    enabled: true
+    chart: argo/argo-cd
+    version: 3.33.6
+    valuesFiles: 
+      - "./values.yaml"
+
+  kiali-operator:
+    namespace: kiali-operator
+    enabled: true
+    chart: kiali/kiali-operator
+    version: 1.47.0
+    valuesFiles: 
+      - "./values.yaml"
+
+  jaeger-operator:
+    namespace: jaeger-operator
+    enabled: true
+    chart: jaegertracing/jaeger-operator
+    version: 2.29.0
+    valuesFiles: 
+      - "./values.yaml"
+
+  kube-prometheus:
+    namespace: prometheus
+    enabled: true
+    chart: prometheus-community/kube-prometheus-stack
+    version: 33.1.0
+    helmFlags:
+      - "--no-hooks"
+    valuesFiles: 
+      - "./values.yaml"
+
+        #grafana:
+        #  namespace: grafana
+        #  enabled: true
+        #  chart: grafana/grafana
+        #  version: 6.23.0
+        #  valuesFiles:
+        #    - "./values.yaml"
+  
+  cadvisor:
+    namespace: cadvisor
+    enabled: true
+    chart: ckotzbauer/cadvisor
+    version: 2.0.0
+    valuesFiles:
+      - "./values.yaml"
+
+    

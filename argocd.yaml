@@ -1,0 +1,381 @@
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: istio-system
+
+---
+
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: metrics-server
+
+---
+
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: argocd
+  labels:
+    istio-injection: enabled
+
+---
+
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: prometheus
+  labels:
+    istio-injection: enabled
+
+---
+
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: kiali-operator
+  labels:
+    istio-injection: enabled
+
+---
+
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: jaeger-operator
+  labels:
+    istio-injection: enabled
+
+---
+
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: grafana
+  labels:
+    istio-injection: enabled
+
+---
+
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: cadvisor
+  labels:
+    istio-injection: enabled
+
+---
+
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: master
+  namespace: argocd
+spec:
+  sourceRepos:
+  - '*'
+  destinations:
+  - namespace: '*'
+    server: '*'
+  clusterResourceWhitelist:
+  - group: '*'
+    kind: '*'
+---
+
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: argo-cd-app
+  namespace: argocd
+spec:
+  project: master
+  source:
+    chart: argo-cd
+    repoURL: https://argoproj.github.io/argo-helm
+    targetRevision: 3.35.1
+    helm:
+      values: |
+        server:
+          extraArgs: 
+            - --insecure
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+
+---
+
+# apiVersion: argoproj.io/v1alpha1
+# kind: Application
+# metadata:
+#   name: metrics-server-app
+#   namespace: argocd
+# spec:
+#   project: master
+#   source:
+#     chart: metrics-server
+#     repoURL: https://kubernetes-sigs.github.io/metrics-server/
+#     targetRevision: 3.8.2
+#     helm:
+#       values: |
+#         args:
+#           - --kubelet-insecure-tls
+#   destination:
+#     server: https://kubernetes.default.svc
+#     namespace: kube-system
+#   syncPolicy:
+#     automated:
+#       prune: true
+#       selfHeal: true
+
+---
+
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: istio-base-app
+  namespace: argocd
+spec:
+  project: master
+  source:
+    chart: base
+    repoURL: https://istio-release.storage.googleapis.com/charts
+    targetRevision: 1.13.0
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: istio-system
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+  ignoreDifferences:
+  - group: admissionregistration.k8s.io
+    kind: ValidatingWebhookConfiguration
+    name: istiod-default-validator
+    jsonPointers:
+      - /webhooks/0/failurePolicy
+
+---
+
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: istiod-app
+  namespace: argocd
+spec:
+  project: master
+  source:
+    chart: istiod
+    repoURL: https://istio-release.storage.googleapis.com/charts
+    targetRevision: 1.13.0
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: istio-system
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+
+---
+
+
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kiali-operator-app
+  namespace: argocd
+spec:
+  project: master
+  source:
+    chart: kiali-operator
+    repoURL: https://kiali.org/helm-charts
+    targetRevision: 1.47.0
+    helm:
+      values: |
+        cr:
+          create: true
+          namespace: istio-system
+          spec:  
+            external_services:
+              prometheus:
+                # Prometheus service name is "metrics" and is in the "telemetry" namespace
+                url: "http://kube-prometheus-prometheus.prometheus:9090/"
+              tracing:
+                enabled: true
+                in_cluster_url: 'http://jaeger-operator-jaeger-query.jaeger-operator:16685/jaeger'
+                use_grpc: true
+                url: 'http://my-jaeger-host/jaeger' 
+              grafana:
+                enabled: true
+                # Grafana service name is "grafana" and is in the "telemetry" namespace.
+                in_cluster_url: 'http://grafana.grafana:3000/'
+                # Public facing URL of Grafana
+                url: 'http://my-ingress-host/grafana'
+            auth:
+              strategy: "anonymous"
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: kiali-operator
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+
+---
+
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: jaeger-operator-app
+  namespace: argocd
+spec:
+  project: master
+  source:
+    chart: jaeger-operator
+    repoURL: https://jaegertracing.github.io/helm-charts
+    targetRevision: 2.29.0
+    helm:
+      values: |
+        jaeger:
+          create: true
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: jaeger-operator
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+
+---
+
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kube-prometheus-stack-app
+  namespace: argocd
+spec:
+  project: master
+  source:
+    chart: kube-prometheus-stack
+    repoURL: https://prometheus-community.github.io/helm-charts
+    targetRevision: 33.2.0
+    helm:
+      #values: |
+      #  prometheus:
+      #    prometheusSpec:
+      #      additionalScrapeConfigs: 
+      #        - job_name: kubernetes-nodes-cadvisor
+      #          scrape_interval: 10s
+      #          scrape_timeout: 10s
+      #          scheme: https  # remove if you want to scrape metrics on insecure port
+      #          tls_config:
+      #            ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+      #          bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+      #          kubernetes_sd_configs:
+      #            - role: node
+      #          relabel_configs:
+      #            - action: labelmap
+      #              regex: __meta_kubernetes_node_label_(.+)
+      #            # Only for Kubernetes ^1.7.3.
+      #            # See: https://github.com/prometheus/prometheus/issues/2916
+      #            - target_label: __address__
+      #              replacement: kubernetes.default.svc:443
+      #            - source_labels: [__meta_kubernetes_node_name]
+      #              regex: (.+)
+      #              target_label: __metrics_path__
+      #              replacement: /api/v1/nodes/${1}/proxy/metrics/cadvisor
+      #          metric_relabel_configs:
+      #            - action: replace
+      #              source_labels: [id]
+      #              regex: '^/machine\.slice/machine-rkt\\x2d([^\\]+)\\.+/([^/]+)\.service$'
+      #              target_label: rkt_container_name
+      #              replacement: '${2}-${1}'
+      #            - action: replace
+      #              source_labels: [id]
+      #              regex: '^/system\.slice/(.+)\.service$'
+      #              target_label: systemd_service_name
+      #              replacement: '${1}'
+      #  grafana:
+      #    dashboardProviders:
+      #      dashboardproviders.yaml:
+      #        apiVersion: 1
+      #        providers:
+      #          - name: default
+      #            orgId: 1
+      #            folder:
+      #            type: file
+      #            disableDeletion: true
+      #            editable: false
+      #            options:
+      #              path: /var/lib/grafana/dashboards/default
+      #    dashboards:
+      #      default:
+      #        # Ref: https://istio.io/latest/docs/ops/integrations/grafana/ 
+      #        istio-mesh:
+      #          gnetId: 7639
+      #          revision: 108
+      #          datasource: Prometheus
+
+      #        istio-service:
+      #          gnetId: 7636
+      #          revision: 108
+      #          datasource: Prometheus
+
+      #        istio-workload:
+      #          gnetId: 7630
+      #          revision: 108
+      #          datasource: Prometheus
+
+      #        istio-perfomance:
+      #          gnetId: 11829
+      #          revision: 108
+      #          datasource: Prometheus
+
+      #        istio-control-plane:
+      #          gnetId: 7645
+      #          revision: 108
+      #          datasource: Prometheus
+
+      #        kubernetes-cluster:
+      #          # Ref: https://grafana.com/grafana/dashboards/315
+      #          gnetId: 315
+      #          revision: 3
+      #          datasource: Prometheus
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: prometheus
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+
+---
+
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cadvisor-app
+  namespace: argocd
+spec:
+  project: master
+  source:
+    chart: cadvisor
+    repoURL: https://ckotzbauer.github.io/helm-charts
+    targetRevision: 2.0.0
+    helm:
+      values: |
+        metrics:
+          enabled: true
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: cadvisor
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+
+---

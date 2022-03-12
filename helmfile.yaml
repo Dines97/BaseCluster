@@ -1,0 +1,62 @@
+repositories:
+  - name: istio
+    url: https://istio-release.storage.googleapis.com/charts
+    
+  - name: argo
+    url: https://argoproj.github.io/argo-helm
+
+  - name: kiali
+    url: https://kiali.org/helm-charts
+
+ #- name: prometheus-community
+ #  url: https://prometheus-community.github.io/helm-charts
+
+  - name: bitnami
+    url: https://charts.bitnami.com/bitnami
+
+releases:
+  - name: istio-base
+    namespace: istio-system
+    createNamespace: true
+    chart: istio/base
+    version: 1.13.0
+
+  - name: istiod
+    namespace: istio-system
+    createNamespace: true
+    chart: istio/istiod
+    version: 1.13.0
+
+  - name: argo-cd
+    namespace:  argocd
+    createNamespace: true
+    chart: argo/argo-cd
+    version: 3.33.6
+    values: 
+    - server:
+        extraArgs:
+        - --insecure
+
+  - name: kiali-operator
+    namespace: kiali-operator
+    createNamespace: true
+    chart: kiali/kiali-operator
+    version: 1.47.0
+    values:
+      - cr:
+          create: true
+          namespace: istio-system
+
+  - name: kube-prometheus
+    namespace: prometheus
+    createNamespace: true
+    chart: bitnami/kube-prometheus
+    version: 6.6.9
+
+
+
+
+          
+          
+
+    
