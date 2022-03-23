@@ -1,16 +1,16 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: argo-cd-0
+  name: self-0
 spec:
   project: {{ (.Values.project).name }}
   source:
-    chart: argo-cd
-    targetRevision: {{ (.Values.argo_cd).version }}
-    repoURL: https://argoproj.github.io/argo-helm
+    path: /ikpjg
+    targetRevision: HEAD
+    repoURL: https://github.com/Dines97/BaseCluster.github
     helm:
       values: |
-        {{- (.Values.argo_cd).values | nindent 8 }}
+        {{- .Values | nindent 8 }}
   destination:
     server: https://kubernetes.default.svc
     namespace: argo-cd

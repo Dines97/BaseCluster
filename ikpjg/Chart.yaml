@@ -23,17 +23,3 @@ version: 0.1.0
 # It is recommended to use it with quotes.
 appVersion: "1.16.0"
 
-dependencies:
-  #- name: base
-  #  version: 1.13.0
-  #  repository: https://istio-release.storage.googleapis.com/charts
-
-  #- name: istiod
-  #  version: 1.13.0
-  #  repository: https://istio-release.storage.googleapis.com/charts
-    
-  - name: argo-cd
-    version: 3.33.6
-    repository: https://argoproj.github.io/argo-helm
-
-

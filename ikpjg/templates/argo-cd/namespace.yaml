@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: argocd
+  name: argo-cd
   labels:
-    {{- include "ikpjg.labels" . | nindent 4 }}
     istio-injection: enable
+    {{- include "ikpjg.labels" . | nindent 4 }}
   
 
 
