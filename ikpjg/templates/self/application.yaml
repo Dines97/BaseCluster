@@ -5,7 +5,7 @@ metadata:
 spec:
   project: {{ (.Values.project).name }}
   source:
-    path: /ikpjg
+    path: ikpjg/
     targetRevision: HEAD
     repoURL: https://github.com/Dines97/BaseCluster.git
     helm:
