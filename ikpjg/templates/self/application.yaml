@@ -8,11 +8,6 @@ spec:
     path: ikpjg/
     targetRevision: HEAD
     repoURL: https://github.com/Dines97/BaseCluster.git
-    helm:
-      values: |
-        {{- with .Values.favorite }}
-        {{ . | nindent 8 }}
-        {{- end }}
   destination:
     server: https://kubernetes.default.svc
     namespace: argo-cd
