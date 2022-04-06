@@ -2,8 +2,8 @@
 
 KIND=namespace
 NAMESPACE=argo-cd
-ARGOCD_RELEASE=argo-cd-0
-SELF_RELEASE=self-0
+ARGOCD_RELEASE=argo-cd
+SELF_RELEASE=self
 
 helm install $ARGOCD_RELEASE argo/argo-cd --create-namespace --namespace $NAMESPACE
 
