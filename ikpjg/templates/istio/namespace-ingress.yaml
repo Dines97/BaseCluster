@@ -3,5 +3,6 @@ kind: Namespace
 metadata: 
   name: istio-ingress
   labels:
+    istio-injection: enable
     {{- include "ikpjg.labels" . | nindent 4 }}
 
