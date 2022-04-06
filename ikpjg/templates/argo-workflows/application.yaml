@@ -1,20 +1,17 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: argo-cd-0
+  name: argo-workflows-0
   labels:
     {{- include "ikpjg.labels" . | nindent 4 }}
 spec:
   project: {{ (.Values.project).name }}
   source:
-    chart: argo-cd
-    targetRevision: {{ (.Values.argo_cd).version }}
+    chart: argo-workflows
+    targetRevision: 0.13.1
     repoURL: https://argoproj.github.io/argo-helm
-    helm:
-      values: |
-        {{- (.Values.argo_cd).values | nindent 8 }}
   destination:
     server: https://kubernetes.default.svc
-    namespace: argo-cd
+    namespace: argo-workflows
 
 

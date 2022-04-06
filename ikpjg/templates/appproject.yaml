@@ -3,6 +3,8 @@ kind: AppProject
 metadata:
   name: {{ (.Values.project).name }}
   namespace: argo-cd
+  labels:
+    {{- include "ikpjg.labels" . | nindent 4 }}
 spec:
   sourceRepos:
   - '*'

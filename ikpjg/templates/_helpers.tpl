@@ -40,6 +40,7 @@ helm.sh/chart: {{ include "ikpjg.chart" . }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
+argocd.argoproj.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
