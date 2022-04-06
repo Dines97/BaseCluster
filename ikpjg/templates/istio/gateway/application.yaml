@@ -12,6 +12,6 @@ spec:
     targetRevision: 1.13.0
   destination:
     server: https://kubernetes.default.svc
-    namespace: istio-system
+    namespace: istio-ingress
 
 
