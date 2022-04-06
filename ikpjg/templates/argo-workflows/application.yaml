@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: argo-workflows-0
+  name: argo-workflows
   labels:
     {{- include "ikpjg.labels" . | nindent 4 }}
 spec:

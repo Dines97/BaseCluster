@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: istio-gateway-0
+  name: istio-gateway
   labels:
     {{- include "ikpjg.labels" . | nindent 4 }}
 spec:
