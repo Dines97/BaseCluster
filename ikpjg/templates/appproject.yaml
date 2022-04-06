@@ -19,3 +19,6 @@ spec:
     ignore:
       - kind: ConfigMap
         name: istio-ca-root-cert
+      - group: argoproj.io
+        kind: AppProject
+        name: {{ (.Values.project).name }}
