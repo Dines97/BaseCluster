@@ -9,7 +9,7 @@ spec:
   source:
     chart: istiod
     repoURL: https://istio-release.storage.googleapis.com/charts
-    targetRevision: 1.13.0
+    targetRevision: {{ (.Values.istio).version }}
   destination:
     server: https://kubernetes.default.svc
     namespace: istio-system

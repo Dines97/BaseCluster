@@ -9,6 +9,9 @@ argo_cd:
       extraArgs: 
         - --insecure
 
+istio:
+  version: 1.13.2
+
 
 # Default values for ikpjg.
 # This is a YAML-formatted file.
