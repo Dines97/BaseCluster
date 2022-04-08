@@ -1,8 +1,8 @@
 {{- if .Capabilities.APIVersions.Has "networking.istio.io/v1alpha3/VirtualService" }}
-kind: VirtualService
 apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
 metadata:
-  name: vehicleshipment-rule
+  name: argo-cd
 spec:
   hosts:
     - argocd.testing.com
