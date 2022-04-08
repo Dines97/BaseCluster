@@ -3,15 +3,20 @@ project:
 
 argo_cd:
   namespace: argo-cd
-  version: 4.2.2
+  version: 4.5.0
   values: |
     server:
       extraArgs: 
         - --insecure
+        {{- if not (.Values.authentication).enable }}
+        - --disable-auth
+        {{- end }}
 
 istio:
   version: 1.13.2
 
+authentication:
+  enable: false
 
 # Default values for ikpjg.
 # This is a YAML-formatted file.

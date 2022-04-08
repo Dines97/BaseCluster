@@ -10,6 +10,9 @@ spec:
     chart: istiod
     repoURL: https://istio-release.storage.googleapis.com/charts
     targetRevision: {{ (.Values.istio).version }}
+    helm:
+      #Required for some unknown bug
+      releaseName: istio
   destination:
     server: https://kubernetes.default.svc
     namespace: istio-system

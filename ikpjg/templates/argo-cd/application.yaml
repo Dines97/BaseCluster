@@ -12,9 +12,15 @@ spec:
     repoURL: https://argoproj.github.io/argo-helm
     helm:
       values: |
-        {{- (.Values.argo_cd).values | nindent 8 }}
+        {{- tpl (.Values.argo_cd).values . | nindent 8 }}
   destination:
     server: https://kubernetes.default.svc
     namespace: argo-cd
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
 
 
