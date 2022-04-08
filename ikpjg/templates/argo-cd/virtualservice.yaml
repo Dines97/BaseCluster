@@ -1,0 +1,13 @@
+kind: VirtualService
+apiVersion: networking.istio.io/v1alpha3
+metadata:
+  name: vehicleshipment-rule
+spec:
+  hosts:
+    - argocd.testing.com
+  gateways:
+    - argo-cd
+  http:
+    - route:
+        - destination:
+            host: argo-cd-argocd-server

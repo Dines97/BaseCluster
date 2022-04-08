@@ -1,0 +1,14 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: argo-cd
+  namespace: argo-cd
+spec:
+  servers:
+    - hosts:
+      - 'argocd.testing.com'
+      port:
+        name: http
+        number: 80
+        protocol: HTTP
+
