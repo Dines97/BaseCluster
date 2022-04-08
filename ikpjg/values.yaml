@@ -13,7 +13,7 @@ argo_cd:
         {{- end }}
 
 kiali:
-  values:
+  values: |
     cr:
       create: true
       namespace: istio-system
