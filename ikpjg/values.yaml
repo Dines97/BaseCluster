@@ -12,6 +12,17 @@ argo_cd:
         - --disable-auth
         {{- end }}
 
+kiali:
+  cr:
+    create: true
+    namespace: istio-system
+    spec:
+      {{- if not (.Values.authentication).enable }}
+      auth:
+        strategy: "anonymous"
+      {{- end }}
+
+
 istio:
   version: 1.13.2
 
