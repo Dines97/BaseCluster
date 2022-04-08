@@ -1,3 +1,4 @@
+{{- if .Capabilities.APIVersions.Has "networking,istio.io/v1alpha3/Gateway" }}
 apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
@@ -11,4 +12,4 @@ spec:
         name: http
         number: 80
         protocol: HTTP
-
+{{- end }}
