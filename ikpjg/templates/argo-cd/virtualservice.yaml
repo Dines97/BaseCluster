@@ -1,4 +1,4 @@
-{{- if .Capabilities.APIVersions.Has "networking,istio.io/v1alpha3/VirtualService" }}
+{{- if .Capabilities.APIVersions.Has "networking.istio.io/v1alpha3/VirtualService" }}
 kind: VirtualService
 apiVersion: networking.istio.io/v1alpha3
 metadata:
