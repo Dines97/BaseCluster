@@ -13,14 +13,15 @@ argo_cd:
         {{- end }}
 
 kiali:
-  cr:
-    create: true
-    namespace: istio-system
-    spec:
-      {{- if not (.Values.authentication).enable }}
-      auth:
-        strategy: "anonymous"
-      {{- end }}
+  values:
+    cr:
+      create: true
+      namespace: istio-system
+      spec:
+        {{- if not (.Values.authentication).enable }}
+        auth:
+          strategy: "anonymous"
+        {{- end }}
 
 
 istio:
