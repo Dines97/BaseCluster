@@ -5,6 +5,8 @@ metadata:
   name: argo-cd
   namespace: argo-cd
 spec:
+  selector:
+    istio: gateway
   servers:
     - hosts:
       - 'argocd.testing.com'
