@@ -21,5 +21,11 @@ spec:
         - kubectl-label
         - helm
         - argocd-application-controller
-
+    - group: v1
+      kind: Namespace
+      managedFieldsManagers:
+        - kubectl-annotate
+        - kubectl-label
+        - helm
+        - argocd-application-controller
 
