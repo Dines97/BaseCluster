@@ -13,18 +13,4 @@ spec:
   destination:
     server: https://kubernetes.default.svc
     namespace: argo-cd
-  ignoreDifferences:
-    - group: argoproj.io
-      kind: Application
-      managedFieldsManagers:
-        - kubectl-annotate
-        - kubectl-label
-        - helm
-        - argocd-application-controller
-    - kind: Namespace
-      managedFieldsManagers:
-        - kubectl-annotate
-        - kubectl-label
-        - helm
-        - argocd-application-controller
 
