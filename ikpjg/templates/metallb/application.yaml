@@ -1,0 +1,23 @@
+{{- if (.Values.metallb).enable }}
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: metallb
+  labels:
+    {{- include "ikpjg.labels" . | nindent 4 }}
+spec:
+  project: {{ (.Values.project).name }}
+  source:
+    chart: metallb
+    targetRevision: 0.12.1
+    repoURL: https://metallb.github.io/metallb
+    helm:
+      values: |
+        {{- tpl (.Values.metallb).values . | nindent 8 }}
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: metallb-system
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+{{- end }}

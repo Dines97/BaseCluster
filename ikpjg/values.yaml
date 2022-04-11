@@ -23,6 +23,17 @@ kiali:
           strategy: "anonymous"
         {{- end }}
 
+metallb:
+  enable: true
+  values: |
+    configInline:
+      address-pools:
+       - name: default
+         protocol: layer2
+         addresses:
+         - 192.168.49.2/24
+
+
 
 istio:
   version: 1.13.2
