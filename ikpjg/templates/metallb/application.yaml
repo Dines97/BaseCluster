@@ -18,6 +18,7 @@ spec:
     server: https://kubernetes.default.svc
     namespace: metallb-system
   syncPolicy:
-    syncOptions:
-      - CreateNamespace=true
+    automated:
+      prune: true
+      selfHeal: true
 {{- end }}
