@@ -3,7 +3,6 @@ kind: Namespace
 metadata:
   name: kiali-operator
   labels:
-    istio-injection: enabled
     {{- include "ikpjg.labels" . | nindent 4 }}
   
 
