@@ -1,0 +1,18 @@
+{{- if .Capabilities.APIVersions.Has "networking.istio.io/v1alpha3/VirtualService" }}
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: kiali
+  namespace: istio-system
+spec:
+  hosts:
+    - kiali.testing.com
+  gateways:
+    - kiali
+  http:
+    - route:
+        - destination:
+            hosts: kiali
+            port:
+              number: 80
+{{- end}}
