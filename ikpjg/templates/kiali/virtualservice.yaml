@@ -12,7 +12,7 @@ spec:
   http:
     - route:
         - destination:
-            hosts: kiali
+            host: kiali
             port:
               number: 80
 {{- end}}
