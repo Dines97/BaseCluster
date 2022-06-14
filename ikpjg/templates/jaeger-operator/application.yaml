@@ -15,7 +15,7 @@ spec:
         {{- tpl (.Values.jaeger_operator).values . | nindent 8 }}
   destination:
     server: https://kubernetes.default.svc
-    namespace: jaeger-operator
+    namespace: observability
   syncPolicy:
     automated:
       prune: true
