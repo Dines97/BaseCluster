@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: jaeger-operator
+  labels:
+    {{- include "ikpjg.labels" . | nindent 4 }}
+spec:
+  project: {{ (.Values.project).name }}
+  source:
+    chart: jaeger-operator
+    targetRevision: {{ (.Values.jaeger_operator).version }}
+    repoURL: https://jaegertracing.github.io/helm-charts
+    helm:
+      values: |
+        {{- tpl (.Values.jaeger_operator).values . | nindent 8 }}
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: jaeger-operator
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+
+

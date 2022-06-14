@@ -22,7 +22,13 @@ kiali:
         auth:
           strategy: "anonymous"
         {{- end }}
-
+        external_services:
+          tracing:
+            enabled: true
+            in_cluster_url: 'http://jaeger-operator-jaeger-query.jaeger-operator:16685/jaeger'
+            use_grpc: true
+            url: 'http://my-jaeger-host/jaeger' 
+ 
 metallb:
   enable: true
   values: |
@@ -32,6 +38,11 @@ metallb:
          protocol: layer2
          addresses:
          - 192.168.49.2-192.168.49.2
+
+jaeger_operator:
+  version: 2.32.0
+  values: |
+    create: true
 
 
 
