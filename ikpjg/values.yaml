@@ -44,10 +44,14 @@ jaeger_operator:
   values: |
     create: true
 
-
-
 istio:
   version: 1.13.2
+
+cert_manager:
+  version: v1.8.0
+  values: |
+    installCRDs=true
+
 
 authentication:
   enable: false
