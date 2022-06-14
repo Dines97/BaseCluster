@@ -50,7 +50,7 @@ istio:
 cert_manager:
   version: v1.8.0
   values: |
-    installCRDs=true
+    installCRDs: true
 
 
 authentication:
