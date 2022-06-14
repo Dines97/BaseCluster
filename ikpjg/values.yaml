@@ -42,7 +42,10 @@ metallb:
 jaeger_operator:
   version: 2.32.0
   values: |
-    create: true
+    jaeger:
+      create: true
+    rbac:
+      clusterRole: true
 
 istio:
   version: 1.13.2
