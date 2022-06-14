@@ -45,6 +45,9 @@ jaeger_operator:
     jaeger:
       create: true
       namespace: jaeger
+      spec:
+        ingress:
+          enabled: false
     rbac:
       clusterRole: true
 
