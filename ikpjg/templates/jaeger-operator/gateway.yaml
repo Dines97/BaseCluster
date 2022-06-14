@@ -3,7 +3,7 @@ apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
   name: jaeger
-  namespace: jaeger-operator
+  namespace: observability
 spec:
   selector:
     istio: gateway
