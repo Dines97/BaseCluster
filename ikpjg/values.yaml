@@ -44,6 +44,7 @@ jaeger_operator:
   values: |
     jaeger:
       create: true
+      namespace: jaeger
     rbac:
       clusterRole: true
 
