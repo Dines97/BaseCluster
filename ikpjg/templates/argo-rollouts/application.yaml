@@ -1,0 +1,26 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: argo-rollouts
+  labels:
+    {{- include "ikpjg.labels" . | nindent 4 }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"
+spec:
+  project: {{ (.Values.project).name }}
+  source:
+    chart: argo-cd
+    targetRevision: {{ (.Values.argo_rollouts).version }}
+    repoURL: https://argoproj.github.io/argo-helm
+    helm:
+      values: |
+        {{- tpl (.Values.argo_rollouts).values . | nindent 8 }}
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argo-rollouts
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+
+

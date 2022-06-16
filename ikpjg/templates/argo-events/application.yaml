@@ -1,0 +1,26 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: argo-events
+  labels:
+    {{- include "ikpjg.labels" . | nindent 4 }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"
+spec:
+  project: {{ (.Values.project).name }}
+  source:
+    chart: argo-events
+    targetRevision: {{ (.Values.argo_events).version }}
+    repoURL: https://argoproj.github.io/argo-helm
+    helm:
+      values: |
+        {{- tpl (.Values.argo_events).values . | nindent 8 }}
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argo-events
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+
+

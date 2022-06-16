@@ -12,6 +12,17 @@ argo_cd:
         - --disable-auth
         {{- end }}
 
+argo_rollouts:
+  version: 2.16.0
+  values: |
+    dashboard:
+      enabled: true
+
+argo_events:
+  version: 2.0.0
+  values: |
+
+
 kiali:
   values: |
     cr:
