@@ -9,7 +9,7 @@ metadata:
 spec:
   project: {{ (.Values.project).name }}
   source:
-    chart: argo-cd
+    chart: argo-rollouts
     targetRevision: {{ (.Values.argo_rollouts).version }}
     repoURL: https://argoproj.github.io/argo-helm
     helm:
