@@ -18,7 +18,6 @@ argo_rollouts:
     dashboard:
       enabled: true
       extraArgs: 
-        - --insecure
         {{- if not (.Values.authentication).enable }}
         - --disable-auth
         {{- end }}
