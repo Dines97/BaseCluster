@@ -1,0 +1,18 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: {{ include "istio-network.fullname" . }}-argo-cd
+  namespace: argo-cd
+  labels:
+    {{- include "istio-network.labels" . | nindent 4 }}
+spec:
+  hosts:
+    - argocd.{{ .Values.domain }}
+  gateways:
+    - argo-cd
+  http:
+    - route:
+        - destination:
+            host: argo-cd-argocd-server
+            port:
+              number: 80

@@ -1,0 +1,21 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: {{ include "istio-network.fullname" . }}
+  namespace: default
+  labels:
+    {{- include "istio-network.labels" . | nindent 4 }}
+spec:
+  selector:
+    istio: gateway
+  servers:
+    - hosts:
+      - 'argocd.{{ .Values.domain }}'
+      - 'jaeger.{{ .Values.domain }}'
+      - 'kiali.{{ .Values.domain }}'
+      - 'rollouts.{{ .Values.domain }}'
+      - 'workflows.{{ .Values.domain }}'
+      port:
+        name: http
+        number: 80
+        protocol: HTTP

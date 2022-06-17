@@ -1,16 +1,19 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: self
+  name: istio-network
   labels:
     {{- include "ikpjg.labels" . | nindent 4 }}
 spec:
   project: {{ (.Values.project).name }}
   source:
-    path: ikpjg/
+    path: istio-network/
     targetRevision: HEAD
     repoURL: {{ .Values.repoURL }}
   destination:
     server: https://kubernetes.default.svc
-    namespace: argo-cd
-
+    namespace: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
