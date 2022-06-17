@@ -9,7 +9,7 @@ spec:
   hosts:
     - kiali.{{ .Values.domain }}
   gateways:
-    - default/istio-network-istio-network
+    - default/istio-network
   http:
     - route:
         - destination:

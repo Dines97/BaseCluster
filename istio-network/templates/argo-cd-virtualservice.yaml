@@ -9,7 +9,7 @@ spec:
   hosts:
     - argocd.{{ .Values.domain }}
   gateways:
-    - argo-cd
+    - default/istio-network
   http:
     - route:
         - destination:
