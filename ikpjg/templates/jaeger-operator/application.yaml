@@ -4,6 +4,8 @@ metadata:
   name: jaeger-operator
   labels:
     {{- include "ikpjg.labels" . | nindent 4 }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "11"
 spec:
   project: {{ (.Values.project).name }}
   source:

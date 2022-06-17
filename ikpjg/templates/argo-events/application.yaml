@@ -4,8 +4,6 @@ metadata:
   name: argo-events
   labels:
     {{- include "ikpjg.labels" . | nindent 4 }}
-  annotations:
-    argocd.argoproj.io/sync-wave: "0"
 spec:
   project: {{ (.Values.project).name }}
   source:
@@ -18,9 +16,4 @@ spec:
   destination:
     server: https://kubernetes.default.svc
     namespace: argo-events
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
-
 
