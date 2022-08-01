@@ -68,7 +68,7 @@ metallb:
          - 192.168.49.2-192.168.49.2
 
 jaeger_operator:
-  version: 2.32.2
+  version: 2.33.0
   values: |
     jaeger:
       create: true
