@@ -10,9 +10,6 @@ spec:
     chart: argo-events
     targetRevision: {{ (.Values.argo_events).version }}
     repoURL: https://argoproj.github.io/argo-helm
-    helm:
-      values: |
-        {{- tpl (.Values.argo_events).values . | nindent 8 }}
   destination:
     server: https://kubernetes.default.svc
     namespace: argo-events
