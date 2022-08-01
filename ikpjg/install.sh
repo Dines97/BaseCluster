@@ -3,15 +3,15 @@
 KIND=namespace
 NAMESPACE=argo-cd
 ARGOCD_RELEASE=argo-cd
-SELF_RELEASE=self
+ROOT_RELEASE=root
 
-helm upgrade --install $ARGOCD_RELEASE argo/argo-cd --create-namespace --namespace $NAMESPACE
+helm upgrade --install $ARGOCD_RELEASE argo-cd --create-namespace --namespace $NAMESPACE --repo https://argoproj.github.io/argo-helm
 
 kubectl delete secret sh.helm.release.v1.$ARGOCD_RELEASE.v1 --namespace $NAMESPACE
 
-kubectl annotate $KIND $NAMESPACE meta.helm.sh/release-name=$SELF_RELEASE
+kubectl annotate $KIND $NAMESPACE meta.helm.sh/release-name=$ROOT_RELEASE
 kubectl annotate $KIND $NAMESPACE meta.helm.sh/release-namespace=$NAMESPACE
 kubectl label $KIND $NAMESPACE app.kubernetes.io/managed-by=Helm
 
-helm upgrade --install $SELF_RELEASE . -n $NAMESPACE
+helm upgrade --install $ROOT_RELEASE . -n $NAMESPACE --repo https://argoproj.github.io/argo-helm
 

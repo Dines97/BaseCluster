@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: self
+  name: root
   labels:
     {{- include "ikpjg.labels" . | nindent 4 }}
 spec:
