@@ -13,5 +13,8 @@ spec:
   destination:
     server: https://kubernetes.default.svc
     namespace: argo-workflows
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
 
 

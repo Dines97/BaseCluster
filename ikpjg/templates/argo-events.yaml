@@ -13,4 +13,7 @@ spec:
   destination:
     server: https://kubernetes.default.svc
     namespace: argo-events
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
 
