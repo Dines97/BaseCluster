@@ -87,6 +87,16 @@ cert_manager:
   values: |
     installCRDs: true
 
+postgresql:
+  version: 11.6.25
+
+pgadmin4:
+  version: 1.11.0
+  values: |
+    env:
+      email: testing@local.com
+      password: SuperSecret
+
 authentication:
   enable: false
 

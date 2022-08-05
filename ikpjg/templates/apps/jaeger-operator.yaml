@@ -24,3 +24,11 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
+
+---
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: jaeger
+  labels:

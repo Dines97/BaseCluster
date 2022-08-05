@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: pgadmin4
+  labels:
+    {{- include "ikpjg.labels" . | nindent 4 }}
+spec:
+  project: {{ (.Values.project).name }}
+  source:
+    chart: pgadmin4
+    targetRevision: {{ (.Values.pgadmin4).version }}
+    repoURL: https://helm.runix.net
+    helm:
+      values: |
+        {{- tpl (.Values.pgadmin4).values . | nindent 8 }}
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: pgadmin4
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+
