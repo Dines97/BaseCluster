@@ -1,0 +1,18 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: {{ include "istio-network.fullname" . }}-rollouts
+  namespace: pgadmin4
+  labels:
+    {{- include "istio-network.labels" . | nindent 4 }}
+spec:
+  hosts:
+    - db.{{ .Values.domain }}
+  gateways:
+    - default/istio-network
+  http:
+    - route:
+        - destination:
+            host: pgadmin4
+            port:
+              number: 80

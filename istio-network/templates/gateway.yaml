@@ -15,6 +15,7 @@ spec:
       - 'kiali.{{ .Values.domain }}'
       - 'rollouts.{{ .Values.domain }}'
       - 'workflows.{{ .Values.domain }}'
+      - 'db.{{ .Values.domain }}'
       port:
         name: http
         number: 80
