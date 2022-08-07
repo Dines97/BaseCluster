@@ -9,7 +9,7 @@ spec:
   source:
     targetRevision: {{ (.Values.kubeflow).version }}
     repoURL: https://github.com/kubeflow/manifests.git
-    path: apps/centraldashboard/upstream
+    path: apps/centraldashboard/upstream/base
   destination:
     server: https://kubernetes.default.svc
     namespace: kubeflow
