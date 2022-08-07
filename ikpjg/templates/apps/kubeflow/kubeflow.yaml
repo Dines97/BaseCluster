@@ -1,0 +1,19 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kubeflow-central-dashboard
+  labels:
+    {{- include "ikpjg.labels" . | nindent 4 }}
+spec:
+  project: {{ (.Values.project).name }}
+  source:
+    targetRevision: {{ (.Values.kubeflow).version }}
+    repoURL: https://github.com/kubeflow/manifests.git
+    path: apps/centraldashboard/upstream
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: kubeflow
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+
