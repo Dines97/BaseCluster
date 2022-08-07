@@ -97,6 +97,9 @@ pgadmin4:
       email: testing@local.com
       password: SuperSecret
 
+kubeflow:
+  version: v1.5.1
+
 authentication:
   enable: false
 
